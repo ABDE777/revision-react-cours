@@ -1,42 +1,52 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef } from 'react';
+import { useState } from 'react';
 import { modifier } from '../reducer'; // Changement ici !
 
 import { useNavigate, useParams } from 'react-router-dom';
 export default function ModUser() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const nomR = useRef('');
-  const prenomR = useRef('');
-  const ageR = useRef('');
   const navig = useNavigate();
-  const usrs = useSelector(
-    (state) => state.users.users.find((e) => e.id === Number.parseInt(id)) // Changement
+  const user = useSelector(
+    (state) => state.users.find((e) => e.id === +id)
   );
-  const handlSubmit = (e) => {
+  const [inp, setInp] = useState({
+    id: +id,
+    nom: user?.nom || '',
+    prenom: user?.prenom || '',
+    age: user?.age || '',
+  });
+  const handleChange = (e) => {
+    setInp({
+      ...inp,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      modifier({
-        id: Number.parseInt(id),
-        nom: nomR.current.value,
-        prenom: prenomR.current.value,
-        age: ageR.current.value,
-      })
-    );
+    dispatch(modifier(inp)); // Changement ici
     navig('/');
   };
   return (
-    <form onSubmit={handlSubmit}>
-      <label htmlFor="nom"> nom</label> <br />
-      <input id="nom" type="text" defaultValue={usrs.nom} ref={nomR} />
+    <form onSubmit={handleSubmit}>
+      nom
       <br />
-      <label htmlFor="prenom">prenom</label> <br />
-      <input id="prenom" type="text" defaultValue={usrs.prenom} ref={prenomR} />
+      <input name="nom" type="text" value={inp.nom} onChange={handleChange} />
       <br />
-      <label htmlFor="age">age</label> <br />
-      <input id="age" type="number" defaultValue={usrs.age} ref={ageR} />
+      prenom
       <br />
-      <button type="submit">ajouter</button>
+      <input
+        name="prenom"
+        type="text"
+        value={inp.prenom}
+        onChange={handleChange}
+      />
+      <br />
+      age
+      <br />
+      <input name="age" type="number" value={inp.age} onChange={handleChange} />
+      <br />
+      <button type="submit">modifier</button>
     </form>
   );
 }

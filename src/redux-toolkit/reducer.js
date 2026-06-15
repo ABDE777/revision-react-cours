@@ -1,13 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 // État initial (exactement comme avant)
-const initialState = {
-  users: [
-    { id: 1, nom: 'abdo', prenom: 'mazgoura', age: 20 },
-    { id: 2, nom: 'jad', prenom: 'ghallali', age: 19 },
-    { id: 3, nom: 'ibra', prenom: 'challal', age: 15 },
-  ],
-};
+const initialState = [
+  { id: 1, nom: 'abdo', prenom: 'mazgoura', age: 20 },
+  { id: 2, nom: 'jad', prenom: 'ghallali', age: 19 },
+  { id: 3, nom: 'ibra', prenom: 'challal', age: 15 },
+];
 
 // Création du slice
 const userSlice = createSlice({
@@ -16,19 +14,17 @@ const userSlice = createSlice({
   reducers: {
     // Nos actions (comme les cases du switch)
     ajouter: (state, action) => {
-      // Avec Redux Toolkit, on peut "modifier" le state directement !
-      state.users.push(action.payload);
+    // Avec Redux Toolkit, on peut "modifier" le state directement !
+      state.push(action.payload);
     },
     modifier: (state, action) => {
-      const index = state.users.findIndex(
-        (user) => user.id === action.payload.id
-      );
+      const index = state.findIndex((user) => user.id === action.payload.id);
       if (index !== -1) {
-        state.users[index] = { ...state.users[index], ...action.payload };
+        state[index] = { ...state[index], ...action.payload };
       }
     },
     suprimer: (state, action) => {
-      state.users = state.users.filter((user) => user.id !== action.payload);
+      return state.filter((user) => user.id !== action.payload);
     },
   },
 });

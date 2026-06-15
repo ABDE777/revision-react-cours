@@ -3,7 +3,7 @@ import { suprimer } from '../reducer'; // Changement ici !
 import { Link } from 'react-router-dom';
 
 export default function List() {
-  const data = useSelector((state) => state.users.users); // Changement : state.users.users
+  const data = useSelector((state) => state.users); 
   const dispatch = useDispatch();
 
   return (
@@ -37,7 +37,9 @@ export default function List() {
                       <button>modifier</button>
                     </Link>
                     <button
-                      onClick={() => dispatch(suprimer(u.id))} // Changement ici !
+                      onClick={() => {
+                        return dispatch(suprimer(u.id));
+                      }}
                     >
                       supprimer
                     </button>
